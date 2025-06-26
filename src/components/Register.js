@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 import API from '../api';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import './Register.css'; // Add this import for the CSS file
 
 function Register() {
   const [form, setForm] = useState({ username: '', password: '' });
   const navigate = useNavigate();
 
-  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log("checking",form)
       await API.post('/register', form);
       alert('Registration successful!');
       navigate('/login');
@@ -21,14 +23,32 @@ function Register() {
   };
 
   return (
-    <div>
-      <h2>Register</h2>
-      <form onSubmit={handleSubmit}>
-        <input name="username" onChange={handleChange} placeholder="Username" required />
-        <input type="password" name="password" onChange={handleChange} placeholder="Password" required />
-        <button type="submit">Register</button>
-      </form>
-      <p>Already registered? <a href="/login">Login</a></p>
+    <div className="register-container">
+      <div className="register-card">
+        <h2 className="register-title">Create an Account</h2>
+        <form onSubmit={handleSubmit} className="register-form">
+          <input
+            type="text"
+            name="username"
+            placeholder="Username"
+            value={form.username}
+            onChange={handleChange}
+            required
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
+          <button type="submit">Register</button>
+        </form>
+        <p className="login-link">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
+      </div>
     </div>
   );
 }
